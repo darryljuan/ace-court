@@ -3,6 +3,7 @@
 // Optional: set WEBHOOK_SECRET env var and pass it as secret_token in setWebhook for verification.
 const { loadState, saveState, availabilitySummary, formatSlot } = require('./_lib/store');
 const { nextMonday, weekDates, fmtDay, parseIso } = require('./_lib/dates');
+const { esc } = require('./_lib/markdown');
 const tg = require('./_lib/telegram');
 
 function displayName(u) { return u.first_name || u.username || String(u.id); }
@@ -36,9 +37,9 @@ function askSummary(state, askId) {
   const yes = [], maybe = [], no = [];
   for (const uid of Object.keys(votes)) {
     const v = votes[uid];
-    if (v.vote === 'yes') yes.push(v.name); else if (v.vote === 'maybe') maybe.push(v.name); else no.push(v.name);
+    if (v.vote === 'yes') yes.push(esc(v.name)); else if (v.vote === 'maybe') maybe.push(esc(v.name)); else no.push(esc(v.name));
   }
-  return `❓ ${ask.creator_name} asks: ${ask.question}\n` +
+  return `❓ ${esc(ask.creator_name)} asks: ${esc(ask.question)}\n` +
     `✅ Yes (${yes.length}): ${yes.join(', ') || '—'}\n` +
     `🤔 Maybe (${maybe.length}): ${maybe.join(', ') || '—'}\n` +
     `❌ No (${no.length}): ${no.join(', ') || '—'}`;
@@ -65,12 +66,12 @@ async function handleMessage(msg) {
   } else if (cmd === '/players') {
     const names = Object.keys(state.players).map((uid) => {
       const p = state.players[uid];
-      return `• ${p.first_name}${p.username ? ` (@${p.username})` : ''}`;
+      return `• ${esc(p.first_name)}${p.username ? ` (@${esc(p.username)})` : ''}`;
     });
     await tg.sendMessage(chatId, names.length ? `🎾 Players:\n${names.join('\n')}` : 'No players yet — say /start to register.');
   } else if (cmd === '/avail') {
     const monday = nextMonday();
-    await tg.sendMessage(chatId, `📅 ${displayName(user)}, tap the days you're free next week (week of ${fmtDay(monday)}):`, availKeyboard(state, monday, user.id));
+    await tg.sendMessage(chatId, `📅 ${esc(displayName(user))}, tap the days you're free next week (week of ${fmtDay(monday)}):`, availKeyboard(state, monday, user.id));
   } else if (cmd === '/week') {
     const monday = nextMonday();
     await tg.sendMessage(chatId, availabilitySummary(state, monday, fmtDay, weekDates));
@@ -80,7 +81,7 @@ async function handleMessage(msg) {
     const id = state.nextAskId++;
     state.asks.push({ id, chat_id: chatId, creator_id: user.id, creator_name: displayName(user), question: q });
     await saveState(state);
-    await tg.sendMessage(chatId, `❓ ${displayName(user)} asks: ${q}\n\nTap to answer:`, askKeyboard(id));
+    await tg.sendMessage(chatId, `❓ ${esc(displayName(user))} asks: ${esc(q)}\n\nTap to answer:`, askKeyboard(id));
   } else if (cmd === '/slots') {
     const open = state.slots.filter((s) => s.chat_id === chatId && (s.status === 'open' || s.status === 'full'));
     if (!open.length) { await tg.sendMessage(chatId, 'No open slots. Create one with /slot'); return; }
@@ -154,7 +155,7 @@ async function handleCallback(cb) {
     }
     await tg.editMessageText(msg.chat.id, msg.message_id, formatSlot(state, slot, fmtDay), slotKeyboard(slotId));
     if (slot.status === 'full' && action === 'join') {
-      await tg.sendMessage(msg.chat.id, `🎾 Slot on ${slot.date} ${slot.time} is now FULL — ${slot.venue}!`);
+      await tg.sendMessage(msg.chat.id, `🎾 Slot on ${slot.date} ${slot.time} is now FULL — ${esc(slot.venue)}!`);
     }
   } else if (kind === 'ask') {
     const askId = parseInt(parts[1], 10), vote = parts[2];

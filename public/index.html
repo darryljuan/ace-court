@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ACe Court — Tennis Crew</title>
+<!--
+  Wimbledon / Rolex green — classy theme
+  Green:  #0B3D2E deep, #006341 Wimbledon green, #006039 Rolex green
+  Cream:  #F7F3E8 / #FAF7EF (Wimbledon whites)
+  Gold:   #C5A880 / #B9975B (thin rules, rank no. 1, accents)
+  Fonts:  Playfair Display (titles) • Cormorant Garamond (body / scores)
+          Jost (small-cap labels, letterspaced)
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #0B3D2E;
+    --green: #006341;
+    --green-rolex: #006039;
+    --cream: #F7F3E8;
+    --cream-paper: #FAF7EF;
+    --gold: #C5A880;
+    --gold-dark: #A68A56;
+    --ink: #1C2B24;
+    --muted: #6B7A70;
+    --line: #D9CDB2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--cream);
+    color: var(--ink);
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 19px; line-height: 1.55;
+  }
+  /* Masthead — dark Wimbledon green, gold rule, centred crest */
+  .masthead {
+    background: linear-gradient(180deg, #0E4A37 0%, var(--green-deep) 100%);
+    color: #F7F3E8; text-align: center;
+    padding: 3rem 1.25rem 2.25rem;
+    border-bottom: 3px double var(--gold);
+  }
+  .eyebrow {
+    font-family: "Jost", sans-serif; font-size: 11px; letter-spacing: .32em;
+    text-transform: uppercase; color: var(--gold); margin: 0 0 .9rem;
+  }
+  .masthead h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 600; font-size: clamp(2.4rem, 7vw, 3.6rem);
+    line-height: 1.05; margin: 0;
+  }
+  .masthead h1 em { font-style: italic; font-weight: 500; }
+  /* AC is emphasised subtly — gold, a touch larger, for Anglo-Chinese School.
+     The rest of the name stays in cream, so it reads as one name, not a shout. */
+  .masthead h1 .ac { color: var(--gold); font-weight: 700; letter-spacing: .02em; }
+  .masthead h1 .ac-e { font-style: italic; font-weight: 500; color: #F7F3E8; }
+  .masthead .rule { width: 72px; height: 1px; background: var(--gold); margin: 1.1rem auto; }
+  .masthead p { font-style: italic; font-size: 20px; margin: 0; opacity: .92; }
+  .masthead .meta {
+    font-family: "Jost", sans-serif; font-size: 11px; letter-spacing: .28em;
+    text-transform: uppercase; margin-top: 1.25rem; opacity: .75;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+  .card {
+    background: var(--cream-paper); border: 1px solid var(--line);
+    border-radius: 4px; padding: 1.6rem 1.6rem 1.4rem; margin: 1.5rem 0;
+    box-shadow: 0 1px 0 rgba(11,61,46,.06);
+  }
+  .card h2 {
+    font-family: "Playfair Display", Georgia, serif; font-weight: 600;
+    font-size: 1.55rem; margin: 0 0 .25rem; color: var(--green-deep);
+  }
+  .card .sub {
+    font-family: "Jost", sans-serif; font-size: 11px; letter-spacing: .24em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 1rem;
+  }
+  .gold-rule { height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 0 0 1rem; }
+  pre { white-space: pre-wrap; font-family: "Cormorant Garamond", Georgia, serif; font-size: 19px; margin: 0; }
+  .muted { color: var(--muted); font-size: 17px; }
+  .pill {
+    display: inline-block; font-family: "Jost", sans-serif; font-size: 12px;
+    letter-spacing: .12em; text-transform: uppercase;
+    border: 1px solid var(--green); color: var(--green-deep);
+    border-radius: 999px; padding: .35rem .8rem; margin: .2rem;
+    background: #fff;
+  }
+  /* Leaderboard — Honours Board table */
+  table.board { width: 100%; border-collapse: collapse; }
+  table.board th {
+    font-family: "Jost", sans-serif; font-size: 11px; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--muted); text-align: left;
+    padding: .5rem .25rem; border-bottom: 1px solid var(--gold);
+  }
+  table.board td { padding: .7rem .25rem; border-bottom: 1px solid #EDE6D3; }
+  table.board td.rank {
+    font-family: "Playfair Display", Georgia, serif; font-size: 1.5rem;
+    width: 3rem; color: var(--green-deep);
+  }
+  table.board tr:first-child td.rank { color: var(--gold-dark); }
+  table.board td.name { font-weight: 600; font-size: 20px; }
+  table.board td.pts {
+    font-family: "Playfair Display", Georgia, serif; font-size: 1.35rem;
+    text-align: right; color: var(--green-deep);
+  }
+  table.board th.pts { text-align: right; }
+  .note {
+    border-left: 2px solid var(--gold); padding: .25rem 0 .25rem 1rem;
+    font-style: italic; color: var(--muted); margin-top: 1rem;
+  }
+  footer { text-align: center; color: var(--muted); font-size: 16px; padding-bottom: 2rem; }
+  footer .f-rule { width: 72px; height: 1px; background: var(--gold); margin: 0 auto 1rem; }
+  @media (max-width: 560px) { body { font-size: 18px; } .card { padding: 1.25rem; } }
+</style>
+</head>
+<body>
+<header class="masthead">
+  <p class="eyebrow">Anglo-Chinese School &nbsp;•&nbsp; Singapore</p>
+  <h1><span class="ac">AC</span><span class="ac-e">e</span> Court</h1>
+  <div class="rule"></div>
+  <p>Pairings, scores &amp; the Honours Board — kept the Wimbledon way.</p>
+  <p class="meta">Est. 2026 &nbsp;•&nbsp; @ACtenniscrewbot</p>
+</header>
+
+<main>
+  <section class="card" id="board-card">
+    <h2>The Honours Board</h2>
+    <p class="sub">Season standings — ACe Court leaderboard</p>
+    <div class="gold-rule"></div>
+    <table class="board" id="board">
+      <thead><tr><th>Rank</th><th>Player</th><th>Won</th><th>Lost</th><th class="pts">Points</th></tr></thead>
+      <tbody id="board-body"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
+    </table>
+    <p class="note">Preview — scoring has not started yet. Once you log a result, points will appear here in the order of the Honours Board.</p>
+  </section>
+
+  <section class="card">
+    <h2>How Points Work</h2>
+    <p class="sub">Confirmed — singles &amp; doubles, season by quarter</p>
+    <div class="gold-rule"></div>
+    <p style="margin-top:0">• <strong>Win — 3 points</strong>, loss — 1 point for turning up and finishing<br>
+    • <strong>Singles &amp; doubles:</strong> both players on a winning doubles pair get the same 3 points<br>
+    • <strong>Season:</strong> a quarter — points reset each quarter, champion engraved on the Honours Board</p>
+    <p><em>Log a result:</em> in Telegram, /result Darryl &amp; Keith beat David &amp; Andre 6–4, 6–3 — or tap it in here.</p>
+  </section>
+
+  <section class="card">
+    <h2>Next Week</h2>
+    <p class="sub">Availability — week ahead</p>
+    <div class="gold-rule"></div>
+    <pre id="avail">Loading…</pre>
+  </section>
+
+  <section class="card">
+    <h2>Open Slots</h2>
+    <p class="sub">Booked courts — tap Join in Telegram</p>
+    <div class="gold-rule"></div>
+    <div id="slots">Loading…</div>
+  </section>
+
+  <section class="card">
+    <h2>The Players</h2>
+    <p class="sub">The crew</p>
+    <div class="gold-rule"></div>
+    <div id="players"></div>
+    <p class="muted" id="updated"></p>
+  </section>
+</main>
+
+<footer>
+  <div class="f-rule"></div>
+  Use Telegram for /avail, /ask and /slot — this page is the live view.
+</footer>
+
+<script>
+async function load() {
+  try {
+    const r = await fetch('/api/state');
+    const j = await r.json();
+    document.getElementById('avail').textContent = j.availability || '—';
+    document.getElementById('slots').innerHTML = j.slots.length
+      ? j.slots.map(s => `<pre>${s.text.replace(/</g,'&lt;')}</pre>`).join('<hr style="border:none;border-top:1px solid #EDE6D3"/>')
+      : 'No open slots. Create one in Telegram with /slot';
+    document.getElementById('players').innerHTML = j.players.map(p => `<span class="pill">${p.first_name}</span>`).join('') || '—';
+    // Leaderboard comes from /api/state: [{name, won, lost, points}], season = quarter.
+    const board = (j.leaderboard && j.leaderboard.length ? j.leaderboard : (j.players || []).map(p => ({ name: p.first_name, won: 0, lost: 0, points: 0 })).sort((a, b) => a.name.localeCompare(b.name)));
+    const seasonEl = document.querySelector('#board-card .sub');
+    if (seasonEl && j.season) seasonEl.textContent = 'Season standings — ' + j.season;
+    document.getElementById('board-body').innerHTML = board.length
+      ? board.map((r, i) => `<tr><td class="rank">${i + 1}</td><td class="name">${r.name}</td><td>${r.won}</td><td>${r.lost}</td><td class="pts">${r.points}</td></tr>`).join('')
+      : '<tr><td colspan="5" class="muted">No players yet — say /start in Telegram.</td></tr>';
+    document.getElementById('updated').textContent = 'Updated ' + new Date(j.updatedAt).toLocaleString('en-SG', { timeZone: 'Asia/Singapore' }) + ' SGT • Week of ' + j.weekMonday;
+  } catch (e) { document.getElementById('avail').textContent = 'Could not load — is the bot deployed? ' + e; }
+}
+load(); setInterval(load, 60000);
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{"description":"Tennis Crew Telegram bot — @ACtenniscrewbot. Vercel web app + GitHub Actions Sat/Sun pings.","engines":{"node":">=20"},"name":"ace-court","private":true,"scripts":{"test":"node test/logic.test.js"},"version":"1.0.0"}

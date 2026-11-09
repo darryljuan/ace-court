@@ -47,3 +47,5 @@ GitHub Actions ──POST──▶ Vercel (/api/cron-saturday, /api/cron-sunday)
 `npm test` — runs `test/logic.test.js` (dates, availability, slots, cron auth), no token needed.
 
 Live: https://ace-court-darryl-juan.vercel.app
+
+Storage: state lives in Upstash Redis (shared arrow-prod database, ACe Court key `tennis:state:v1`) — wired 2026-11-09.

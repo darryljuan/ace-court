@@ -45,3 +45,5 @@ GitHub Actions ──POST──▶ Vercel (/api/cron-saturday, /api/cron-sunday)
 
 ## Local test
 `npm test` — runs `test/logic.test.js` (dates, availability, slots, cron auth), no token needed.
+
+Live: https://ace-court-darryl-juan.vercel.app

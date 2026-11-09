@@ -6,6 +6,7 @@
 // State shape: { players:{}, availability:{}, slots:[], slotPlayers:{}, asks:[], askVotes:{}, nextSlotId, nextAskId }
 
 const KEY = 'tennis:state:v1';
+const { esc } = require('./markdown');
 
 function emptyState() {
   return { players: {}, availability: {}, slots: [], slotPlayers: {}, asks: [], askVotes: {}, results: [], nextSlotId: 1, nextAskId: 1 };
@@ -58,7 +59,7 @@ function availabilitySummary(state, weekMondayIso, fmtDay, weekDates) {
     const names = [];
     const week = state.availability[weekMondayIso] || {};
     for (const uid of Object.keys(week)) {
-      if (week[uid].includes(dayIso) && state.players[uid]) names.push(state.players[uid].first_name);
+      if (week[uid].includes(dayIso) && state.players[uid]) names.push(esc(state.players[uid].first_name));
     }
     lines.push(`${fmtDay(dayIso)}: ${names.length ? names.join(', ') : '—'}`);
   }
@@ -74,10 +75,10 @@ function missingPlayers(state, weekMondayIso) {
 
 function formatSlot(state, slot, fmtDay) {
   const players = state.slotPlayers[String(slot.id)] || [];
-  const names = players.map((p) => p.name).join(', ');
+  const names = players.map((p) => esc(p.name)).join(', ');
   const status = slot.status === 'full' ? '✅ FULL' : '🟢 Open';
-  return `🎾 ${fmtDay(slot.date)} ${slot.time} — ${slot.venue}\n` +
-    `Booked by ${slot.creator_name} • ${players.length}/${slot.max_players} • ${status}\n` +
+  return `🎾 ${fmtDay(slot.date)} ${slot.time} — ${esc(slot.venue)}\n` +
+    `Booked by ${esc(slot.creator_name)} • ${players.length}/${slot.max_players} • ${status}\n` +
     `Players: ${names || '—'}\nID: ${slot.id}`;
 }
 

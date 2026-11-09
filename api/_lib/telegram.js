@@ -1,5 +1,6 @@
 // Minimal Telegram Bot API client via fetch. No dependencies.
 const API = 'https://api.telegram.org';
+const { esc } = require('./markdown');
 
 function token() { return process.env.TELEGRAM_BOT_TOKEN; }
 
@@ -31,6 +32,6 @@ function editMessageReplyMarkup(chatId, messageId, replyMarkup) {
 function answerCallbackQuery(id, text, showAlert) {
   return api('answerCallbackQuery', { callback_query_id: id, text: text || '', show_alert: !!showAlert });
 }
-function mention(userId, name) { return `[${name}](tg://user?id=${userId})`; }
+function mention(userId, name) { return `[${esc(name)}](tg://user?id=${userId})`; }
 
 module.exports = { api, sendMessage, editMessageText, editMessageReplyMarkup, answerCallbackQuery, mention };

@@ -78,4 +78,23 @@ assert.deepStrictEqual(board.map((r) => [r.name, r.won, r.lost, r.points]), [
 ], 'doubles winners both get 3, losers get 1, Q3 ignored — got ' + JSON.stringify(board));
 console.log('✓ scoring (singles + doubles, win 3 / loss 1, quarter season)');
 
+// Markdown escaping: usernames/names with '_' broke Telegram replies.
+// /players failed 2026-11-09 with "can't parse entities" on @darryl_juan,
+// because every message is sent with parse_mode 'Markdown' and the '_' opened
+// an italic entity that never closed. Names must be escaped in message text.
+const { esc } = require('../api/_lib/markdown');
+const { mention } = require('../api/_lib/telegram');
+assert.strictEqual(esc('darryl_juan'), 'darryl\\_juan', 'underscore escaped');
+assert.strictEqual(esc('Darryl'), 'Darryl', 'plain names unchanged');
+assert.strictEqual(esc('a*b[c]'), 'a\\*b\\[c\\]', 'other Markdown chars escaped');
+assert.strictEqual(mention(528219308, 'Darryl_Juan'), '[Darryl\\_Juan](tg://user?id=528219308)', 'mention link text escaped');
+const s3 = emptyState();
+s3.players['528219308'] = { username: 'darryl_juan', first_name: 'Darryl_Juan', chat_id: -100 };
+s3.availability['2026-11-16'] = { '528219308': ['2026-11-16'] };
+assert.ok(availabilitySummary(s3, '2026-11-16', fmtDay, weekDates).includes('Darryl\\_Juan'), 'availability names escaped');
+const slot2 = { id: 2, chat_id: -100, creator_id: 528219308, creator_name: 'Darryl_Juan', date: '2026-11-14', time: '09:00', venue: 'Kallang_Court', max_players: 4, status: 'open' };
+s3.slotPlayers['2'] = [{ user_id: 528219308, name: 'Darryl_Juan' }];
+assert.ok(formatSlot(s3, slot2, fmtDay).includes('Darryl\\_Juan') && formatSlot(s3, slot2, fmtDay).includes('Kallang\\_Court'), 'slot names + venue escaped');
+console.log('✓ Markdown escaping (underscore usernames no longer break replies)');
+
 console.log('\nAll Vercel logic tests passed.');
